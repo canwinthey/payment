@@ -37,7 +37,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.bookmyshow</groupId>
-			<artifactId>user-model</artifactId>
+			<artifactId>user-auth-model</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
