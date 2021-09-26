@@ -1,0 +1,48 @@
+version: '3.7'
+services:
+  todo-web-application:
+    image: prassyk/payment-service:0.0.1-SNAPSHOT
+    container_name: payment-service
+    ports:
+      - "8084:8084"
+    restart: always
+    depends_on: # Start the depends_on first
+      - mysql 
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: payment
+      RDS_USERNAME: payment
+      RDS_PASSWORD: dummypayment
+    networks:
+      - payment-network
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: dummypassword 
+      MYSQL_USER: payment
+      MYSQL_PASSWORD: dummypayment
+      MYSQL_DATABASE: payment
+    volumes:
+      - mysql-database-data-volume:/var/lib/mysql
+    networks:
+      - payment-network  
+  
+# Volumes
+#volumes:
+#  mysql-database-data-volume:
+volumes:
+  mysql-database-data-volume:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: 'C:/voldata'  
+
+networks:
+  payment-network:
