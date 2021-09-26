@@ -1,0 +1,59 @@
+server:
+  port: 8084
+
+eureka:
+  client:
+    registerWith-eureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${EUREKA_SERVER:localhost}:8761/eureka
+    
+spring:
+  cloud:
+    config:
+      uri:
+      - http://${CONFIG_SERVER:localhost}:8888/
+  jpa:    show-sql: true
+    hibernate:      ddl-auto: none
+  datasource:    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${RDS_HOSTNAME:localhost}:${RDS_PORT:3306}/${RDS_DB_NAME:payment}
+    username: ${RDS_USERNAME:payment}
+    password: ${RDS_PASSWORD:dummypayment}  
+
+paytm:
+  email: prassy12@gmail.com
+  mobile: 9820891078
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+logging:
+  level:
+    com:
+      logixal: debug
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        
+paytm.payment:
+  sandbox:
+    merchantId: {generate your own merchantId}
+    merchantKey: {generate your merchantKey}
+    channelId: WEB
+    website: WEBSTAGING
+    industryTypeId: Retail
+    paytmUrl:  https://securegw-stage.paytm.in/order/process
+    callbackUrl: http://localhost:9090/pgresponse
+    details:
+      MID: ${paytm.payment.sandbox.merchantid}
+      CHANNEL_ID: ${paytm.payment.sandbox.channelid}
+      INDUSTRY_TYPE_ID: ${paytm.payment.sandbox.industrytypeid}
+      WEBSITE: ${paytm.payment.sandbox.website}
+      CALLBACK_URL: ${paytm.payment.sandbox.callbackUrl}
+        
